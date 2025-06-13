@@ -26,18 +26,35 @@ def binary_search(arr, target):
     
     return -1, comparisons
 
+def measure_performance(search_func, arr, target):
+    start_time = time.time()
+    position, comparisons = search_func(arr, target)
+    end_time = time.time()
+    execution_time = (end_time - start_time) * 1000
+    return position, comparisons, execution_time
+
+def generate_sorted_data(size):
+    return list(range(1, size + 1, 2))
+
 def main():
     print("Search Algorithms Comparison")
     print("=" * 30)
     
-    test_data = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
-    target = 7
+    data_sizes = [1000, 10000, 100000]
     
-    seq_pos, seq_comps = sequential_search(test_data, target)
-    bin_pos, bin_comps = binary_search(test_data, target)
-    
-    print(f"Sequential Search: Found at position {seq_pos} with {seq_comps} comparisons")
-    print(f"Binary Search: Found at position {bin_pos} with {bin_comps} comparisons")
+    for size in data_sizes:
+        print(f"\nTesting with {size} elements:")
+        data = generate_sorted_data(size)
+        
+        random_target = data[random.randint(0, len(data) - 1)]
+        missing_target = data[-1] + 100
+        
+        print(f"Average case (target: {random_target}):")
+        seq_pos, seq_comps, seq_time = measure_performance(sequential_search, data, random_target)
+        bin_pos, bin_comps, bin_time = measure_performance(binary_search, data, random_target)
+        
+        print(f"  Sequential: Position {seq_pos}, {seq_comps} comparisons, {seq_time:.4f}ms")
+        print(f"  Binary: Position {bin_pos}, {bin_comps} comparisons, {bin_time:.4f}ms")
 
 if __name__ == "__main__":
     main()
