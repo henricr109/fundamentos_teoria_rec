@@ -36,25 +36,32 @@ def measure_performance(search_func, arr, target):
 def generate_sorted_data(size):
     return list(range(1, size + 1, 2))
 
+def run_test_case(data, target, case_name):
+    print(f"\n{case_name} (target: {target}):")
+    
+    seq_pos, seq_comps, seq_time = measure_performance(sequential_search, data, target)
+    bin_pos, bin_comps, bin_time = measure_performance(binary_search, data, target)
+    
+    print(f"  Sequential: Position {seq_pos}, {seq_comps} comparisons, {seq_time:.4f}ms")
+    print(f"  Binary: Position {bin_pos}, {bin_comps} comparisons, {bin_time:.4f}ms")
+
 def main():
     print("Search Algorithms Comparison")
-    print("=" * 30)
+    print("=" * 50)
     
     data_sizes = [1000, 10000, 100000]
     
     for size in data_sizes:
         print(f"\nTesting with {size} elements:")
+        print("-" * 30)
+        
         data = generate_sorted_data(size)
         
         random_target = data[random.randint(0, len(data) - 1)]
         missing_target = data[-1] + 100
         
-        print(f"Average case (target: {random_target}):")
-        seq_pos, seq_comps, seq_time = measure_performance(sequential_search, data, random_target)
-        bin_pos, bin_comps, bin_time = measure_performance(binary_search, data, random_target)
-        
-        print(f"  Sequential: Position {seq_pos}, {seq_comps} comparisons, {seq_time:.4f}ms")
-        print(f"  Binary: Position {bin_pos}, {bin_comps} comparisons, {bin_time:.4f}ms")
+        run_test_case(data, random_target, "Average case")
+        run_test_case(data, missing_target, "Worst case")
 
 if __name__ == "__main__":
     main()
