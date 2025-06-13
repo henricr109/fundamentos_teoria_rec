@@ -1,5 +1,7 @@
 import random
 import time
+import matplotlib.pyplot as plt
+import numpy as np
 
 def sequential_search(arr, target):
     comparisons = 0
@@ -51,6 +53,74 @@ def run_test_case(data, target, case_name):
     
     return (seq_comps, seq_time), (bin_comps, bin_time)
 
+def plot_execution_time(results):
+    sizes = [result['size'] for result in results]
+    
+    seq_avg_times = [result['avg_case']['seq'][1] for result in results]
+    bin_avg_times = [result['avg_case']['bin'][1] for result in results]
+    seq_worst_times = [result['worst_case']['seq'][1] for result in results]
+    bin_worst_times = [result['worst_case']['bin'][1] for result in results]
+    
+    plt.figure(figsize=(12, 8))
+    
+    plt.subplot(2, 1, 1)
+    plt.plot(sizes, seq_avg_times, 'o-', label='Sequential Search', color='red', linewidth=2)
+    plt.plot(sizes, bin_avg_times, 's-', label='Binary Search', color='blue', linewidth=2)
+    plt.xlabel('Input Size')
+    plt.ylabel('Execution Time (ms)')
+    plt.title('Average Case - Execution Time Comparison')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.yscale('log')
+    
+    plt.subplot(2, 1, 2)
+    plt.plot(sizes, seq_worst_times, 'o-', label='Sequential Search', color='red', linewidth=2)
+    plt.plot(sizes, bin_worst_times, 's-', label='Binary Search', color='blue', linewidth=2)
+    plt.xlabel('Input Size')
+    plt.ylabel('Execution Time (ms)')
+    plt.title('Worst Case - Execution Time Comparison')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.yscale('log')
+    
+    plt.tight_layout()
+    plt.savefig('execution_time_comparison.png', dpi=300, bbox_inches='tight')
+    plt.show()
+
+def plot_comparisons(results):
+    sizes = [result['size'] for result in results]
+    
+    seq_avg_comps = [result['avg_case']['seq'][0] for result in results]
+    bin_avg_comps = [result['avg_case']['bin'][0] for result in results]
+    seq_worst_comps = [result['worst_case']['seq'][0] for result in results]
+    bin_worst_comps = [result['worst_case']['bin'][0] for result in results]
+    
+    plt.figure(figsize=(12, 8))
+    
+    plt.subplot(2, 1, 1)
+    plt.plot(sizes, seq_avg_comps, 'o-', label='Sequential Search', color='red', linewidth=2)
+    plt.plot(sizes, bin_avg_comps, 's-', label='Binary Search', color='blue', linewidth=2)
+    plt.xlabel('Input Size')
+    plt.ylabel('Number of Comparisons')
+    plt.title('Average Case - Comparisons Count')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.yscale('log')
+    
+    plt.subplot(2, 1, 2)
+    plt.plot(sizes, seq_worst_comps, 'o-', label='Sequential Search', color='red', linewidth=2)
+    plt.plot(sizes, bin_worst_comps, 's-', label='Binary Search', color='blue', linewidth=2)
+    plt.xlabel('Input Size')
+    plt.ylabel('Number of Comparisons')
+    plt.title('Worst Case - Comparisons Count')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.yscale('log')
+    
+    plt.tight_layout()
+    plt.savefig('comparisons_count.png', dpi=300, bbox_inches='tight')
+    plt.show()
+
 def main():
     print("Search Algorithms Performance Comparison")
     print("=" * 50)
@@ -89,6 +159,9 @@ def main():
         print(f"Average case - Binary: {result['avg_case']['bin'][0]} comparisons")
         print(f"Worst case - Sequential: {result['worst_case']['seq'][0]} comparisons")
         print(f"Worst case - Binary: {result['worst_case']['bin'][0]} comparisons")
+    
+    plot_execution_time(results)
+    plot_comparisons(results)
 
 if __name__ == "__main__":
     main()
